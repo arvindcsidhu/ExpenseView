@@ -56,7 +56,7 @@ function loadExpenseGrid() {
 		success : function(response) {
 			$("#expenseTable tbody").empty();
 			var table = $("#expenseTable").DataTable();
-			table.fnDestroy();
+			table.destroy();
 			jQuery.each(response, function(i, expRow) {
 
 				var expenseDate = moment(expRow.date).format("DD-MM-YYYY");
