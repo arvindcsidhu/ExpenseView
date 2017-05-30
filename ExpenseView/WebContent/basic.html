@@ -1,0 +1,222 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.css">
+
+  <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+  <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/plug-ins/1.10.7/integration/jqueryui/dataTables.jqueryui.css">
+<style>
+ #container {
+    display: table;
+    }
+
+  #row  {
+    display: table-row;
+    }
+
+  #left, #right, #middle {
+    display: table-cell;
+    }
+</style>
+</head>
+
+<body>
+<table width="450px">
+<tr>
+ <td valign="top">
+  <label for="first_name">Expense Name *</label>
+ </td>
+ <td valign="top">
+  <input  type="text" name="first_name" class="easyui-validatebox validatebox-text" id = "expenseName" maxlength="50" size="30">
+ </td>
+</tr>
+
+<tr>
+ <td valign="top">
+  <label for="last_name">Expense Date *</label>
+ </td>
+ <td valign="top">
+  <input  type="text" name="last_name" id = "datepicker" maxlength="50" size="30">
+ </td>
+</tr>
+<tr>
+ <td valign="top">
+  <label for="email"> Expense Amount *</label>
+ </td>
+ <td valign="top">
+  <input  type="text" name="email" id = "expenseAmount" maxlength="80" size="30">
+ </td>
+
+</tr>
+<tr>
+ <td valign="top">
+  <label for="telephone">Expense Paid By *</label>
+ </td>
+ <td valign="top">
+  <input  type="text" name="telephone" id = "expensePaidBy" maxlength="30" size="30">
+ </td>
+</tr>
+<tr>
+<!--  <td valign="top">
+  <label for="comments">Comments *</label>
+ </td>
+ <td valign="top">
+  <textarea  name="comments" maxlength="1000" cols="25" rows="6"></textarea>
+ </td> -->
+
+</tr>
+<tr>
+ <td colspan="2" style="text-align:center">
+  <!-- We are grateful to you for keeping this link in place. thank you. -->
+  <input type="button" value="Save" id = "saveBtn"> 
+ </td>
+ <td colspan="2">
+  <input type="button" name="LastName" id = "cancelBtn" value="Cancel"><br>
+  </td>
+</tr>
+</table>
+<!-- <div id="container">
+  <div id="row">
+
+  	<div id="left">
+  	Expense Name: <input type="text" id = "expenseName" name="FirstName" value=""><br>
+  	</div>
+
+  	<div id="middle">
+  	Expense Date: <input type="text" id = "datepicker" name="LastName" value=""><br>
+  	</div>
+
+  	<div id="right">
+    Expense Amount: <input type="number" id = "expenseAmount" name="LastName" value=""><br>
+  	</div>
+  	
+  	<div id="right">
+    Expense Paid By: <input type="text" id = "expensePaidBy" name="LastName" value=""><br>
+  	</div>
+
+	<div id="middle">
+   <input type="button" name="LastName" id = "saveBtn" value="Save"><br><br>
+  	</div>
+  	
+  	<div id="middle">
+   <input type="button" name="LastName" id = "cancelBtn" value="Cancel"><br>
+  	</div>
+  	
+	</div>
+</div> -->
+<br><br>
+  <table id="expenseTable"  class="display" cellspacing="0" width="100%">
+    <thead>
+      <tr><th>Expense Name</th>
+      <th>Expense Date</th>
+      <th>Expense Paid By</th>
+      <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+
+  <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
+     <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
+         <!-- <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/plug-ins/1.10.12/api/fnReloadAjax.js"></script> -->
+  <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="js/expense/expenseGrid.js"></script>
+  
+  <!-- 
+  <script>
+  $(function(){
+	/*   $("#expenseTable").dataTable({
+	        "scrollY":        200,
+	        "scrollCollapse": true,
+	        "jQueryUI":       true
+	    }); */
+	    
+	    $("#datepicker").datepicker();
+	    
+	    $("#saveBtn").off();
+	    $("#saveBtn").on('click',function(){
+	    	
+	    	var formExpenseData = {};
+	    	formExpenseData.amount = $("#expenseAmount").val();
+	    	formExpenseData.date = new Date($("#datepicker").val());
+	    	formExpenseData.expenseName = $("#expenseName").val();
+	    	formExpenseData.expensePaidBy = $("#expensePaidBy").val();
+	    	formExpenseData.id = 0;
+	    	
+	    	 $.ajax({
+	   		  url: "http://localhost:9010/service/createExpense",
+	   		  data: JSON.stringify(formExpenseData),
+	   		  type:"POST",
+	   		  dataType: "json",
+	   		  contentType: "application/json",
+	   		  success: function(response){
+	                alert("Expense Successfully Saved");
+	                $("#expenseAmount").val("");
+	                $("#datepicker").val("");
+	                $("#expenseName").val("");
+	                $("#expensePaidBy").val("");
+	                
+	                $("#expenseGrid").trigger('click');
+	   		  }
+	   		 
+	   		});
+	    	
+	    	
+	    });
+	  
+	  $.ajax({
+		  url: "http://localhost:9010/service/listofAllExpenses",
+		  data: [],
+		  type:"GET",
+		  dataType: "json",
+		  contentType: "application/json",
+		  success: function(response){
+			var table = $("#expenseTable").dataTable();
+			 table.fnDestroy();
+			  jQuery.each(response,function(i,expRow) {
+				 
+				  var expenseDate = moment(expRow.date).format("DD-MM-YYYY");
+				  
+				  var expenseRowData = "<tr>"+
+	              "<td>"+expRow.expenseName+"</td>"+
+	              "<td>"+expenseDate+"</td>"+
+	              "<td>"+expRow.expensePaidBy+"</td>"+
+	              "<td>"+expRow.amount+"</td>"+
+	          		"</tr>";
+				  
+	          		$("#expenseTable tbody").append(expenseRowData);
+				  
+				});
+			  
+			  $("#expenseTable").dataTable({
+			        "scrollY":        200,
+			        "scrollCollapse": true,
+			        "jQueryUI":       true
+			    });
+			
+		  }
+		 
+		});
+	  
+	  var availableTags = [
+	                       "sidhu",
+	                       "kumar"
+	                     ];
+	                     $("#expensePaidBy").autocomplete({
+	                       source: availableTags
+	                     });
+	                     
+	                     var available = [
+	               	                       "Daily Toll"
+	               	                     ];
+	               	                     $("#expenseName").autocomplete({
+	               	                       source: available
+	               	                     });                  
+
+  })
+  </script> -->
+</body>
+</html>
